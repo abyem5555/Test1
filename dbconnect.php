@@ -1,49 +1,72 @@
 <?php
   //DB接続クラス読み込み
   require_once 'dbConnectClass.php';
+  require_once 'dataCheckClass.php';
 
   //クラス生成
   $connect = new dbConnect();
+  $check = new dataCheckClass();
 
-  //検索条件
-  $name = $_POST['userName'];
+  //検索条件をフォームから取得
+  $name = $check->strTrim($_POST['userName']);
+  $age = $check->strTrim($_POST['age']);
+  //$gender = $_POST['gender'];
+  switch($_POST['gender']){
+      //男性
+      case "male":
+        $gender = 'M';
+        break;
+      //女性
+      case "female":
+        $gender = 'F';
+        break;
+      //"both"の場合
+      default:
+        $gender ='';
+        break;
+  }
   //$name = "高橋";
-    
-  //SQL文
-  //！！！LIKEのエスケープ入れる？
-  $sql = 'SELECT * 
-            FROM test122
-            WHERE user_name LIKE(:name1)';
-            //WHERE user_name = "高橋アイコ"';
-            //echo $sql;
-
-  $result = $connect->select($sql, $name);
-  
-  
-    //値をバインド
-    //.で文字連結して検索
-    //$prestm->bindValue(':name1','%'.$nam1.'%',PDO::PARAM_STR);
-    //%{}%で検索
-    //$prestm->bindValue(':name1',"%{$nam1}%",PDO::PARAM_STR);
-    //実行
-    //$prestm->execute();
-
-    //DBから該当するデータを全て取得
-    //$result = $prestm->fetchAll(PDO::FETCH_ASSOC);
-
-    //$stm = $pdo->query("select * from test122");
-    //print($pdo->query("select user_name from test122 where id =1"));
-    //$stm->execute();
-    //$result = $stm->fetchall(PDO::FETCH_ASSOC);
-   //print_r($result);
-    //var_dump($result);
-    //echo $result[user_name];
-
-    //while($row = $stm->fetch()){
-    //    printf($row['age']);
-    //    printf("br");
-    //}
+  //エラーチェック 
+  try{
+       //どの項目にも入力がない場合エラー
+       if(empty($name) && empty($age) && empty($gender)){
+           throw new Exception('条件を入力してください。');
+       }
+       //年齢が正の数字でない場合エラー
+       if(!empty($age) && !$check->chkNum($age)) {
+            throw new Exception('年齢が正しくありません');   
+       }
+    } catch(Exception $e){
+       echo 'error:' .$e->getMessage();
+       return;
+   }
+//            //SQL文
+//            //！！！LIKEのエスケープ入れる？
+//            $sql = 'SELECT * 
+//                    FROM test122
+//                    WHERE';
+//
+//            //検索条件に名前があるとき
+//            if(!empty($name)){
+//                $sqlArray[] = ' user_name LIKE(:name)';
+//            }
+//            //検索条件に名前があるとき
+//            if(!empty($age)){
+//                $sqlArray[] = ' age = :age';
+//            }
+//            //検索条件に名前があるとき
+//            if(!empty($gender)){
+//                $sqlArray[] =' gender = :gender';
+//            }
+//
+            //検索結果を取得
+            $result = $connect->select($name, $age, $gender);
+            //if(!$result){
+            //    throw new Exception('検索結果は0です。');
+            //}
 ?>
+
+
 <!DOCTYPE html>
 <html lang="ja">
     <head>
@@ -72,7 +95,7 @@
                 <td><?=htmlspecialchars($row['id'],ENT_QUOTES,'utf-8')?></td>
                 <td><?=htmlspecialchars($row['user_name'],ENT_QUOTES,'utf-8')?></td>
                 <td><?=htmlspecialchars($row['age'],ENT_QUOTES,'utf-8')?></td>
-                <td><?=htmlspecialchars($row['sex'],ENT_QUOTES,'utf-8')?></td>
+                <td><?=htmlspecialchars($row['gender'],ENT_QUOTES,'utf-8')?></td>
             </tr>
 <?php
     }

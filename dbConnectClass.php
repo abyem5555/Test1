@@ -45,20 +45,70 @@ class dbConnect {
         return $pdo;
     }
 
-    //検索用ファンクション
-    function select($sql, $var1){
+    //名前・年齢・性別での検索用ファンクション
+    function select($name, $age, $gender){
+
+        //SQL文
+        //！！！LIKEのエスケープ入れる？
+        $sql = 'SELECT * 
+                FROM test122
+                WHERE';
+        //$sql = $sql.' user_name = "高橋アイコ"';
+
+        //検索条件に名前があるとき
+        if(!empty($name)){
+            $sqlArray[] = ' user_name LIKE(:name)';
+        }
+        //検索条件に名前があるとき
+        if(!empty($age)){
+            $sqlArray[] = ' age = :age';
+        }
+        //検索条件に名前があるとき
+        if(!empty($gender)){
+            $sqlArray[] =' gender = :gender';
+        }
+
+        //配列の判定した方がいい？
+        //条件をANDでつないでSQL文を作成
+        $sql= $sql.implode(" AND", $sqlArray);
+
+        //検索結果を取得
         $pdosl = $this->pdo();
         $prestm = $pdosl->prepare($sql);
     
-        //検索条件の値をバインド
-        $prestm->bindValue(':name1',"%{$var1}%",PDO::PARAM_STR);
+        //各項目の値がある場合、検索条件をバインド
+        if(!empty($name)){
+            $prestm->bindValue(':name',"%{$name}%",PDO::PARAM_STR);
+        }
+        if(!empty($age)){
+            $prestm->bindValue(':age',$age,PDO::PARAM_INT);
+        }
+        if(!empty($gender)){
+            $prestm->bindValue(':gender',$gender,PDO::PARAM_STR);
+        }
         //実行
-        //$prestm->query($sql);
         $prestm->execute();
         //結果を戻す
-        //$result=$prestm->fetchAll(PDO::FETCH_ASSOC);
-        //return $result;
         return $prestm;
     }
+    
+    //検索用ファンクション
+    //function select($sql, $var1){
+    //    $pdosl = $this->pdo();
+    //    $prestm = $pdosl->prepare($sql);
+    
+    //    //検索条件の値をバインド
+    //    $prestm->bindValue(':name',"%{$var1}%",PDO::PARAM_STR);
+    //    $prestm->bindValue(':age',$age,PDO::PARAM_INT);
+    //    $prestm->bindValue(':gender',$gender,PDO::PARAM_STR);
+    //    
+    //    //実行
+    //    //$prestm->query($sql);
+    //    $prestm->execute();
+    //    //結果を戻す
+    //    //$result=$prestm->fetchAll(PDO::FETCH_ASSOC);
+    //    //return $result;
+    //    return $prestm;
+    //}
 }
 ?>
