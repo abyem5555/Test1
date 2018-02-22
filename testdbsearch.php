@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -7,7 +6,7 @@
 </head>
 
 <body>
-<form method="POST" action="dbconnect.php">
+<form method="POST" action="dbsearch.php">
   <ul>
     <br><label>名前：<input type="text" name="userName"></label>
     <br><label>年齢：<input type="number" name="age"></label>

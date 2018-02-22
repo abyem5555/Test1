@@ -36,34 +36,19 @@
        if(!empty($age) && !$check->chkNum($age)) {
             throw new Exception('年齢が正しくありません');   
        }
+   //検索結果を取得
+   $result = $connect->select($name, $age, $gender);
+
     } catch(Exception $e){
        echo 'error:' .$e->getMessage();
        return;
    }
-//            //SQL文
-//            //！！！LIKEのエスケープ入れる？
-//            $sql = 'SELECT * 
-//                    FROM test122
-//                    WHERE';
-//
-//            //検索条件に名前があるとき
-//            if(!empty($name)){
-//                $sqlArray[] = ' user_name LIKE(:name)';
-//            }
-//            //検索条件に名前があるとき
-//            if(!empty($age)){
-//                $sqlArray[] = ' age = :age';
-//            }
-//            //検索条件に名前があるとき
-//            if(!empty($gender)){
-//                $sqlArray[] =' gender = :gender';
-//            }
-//
-            //検索結果を取得
-            $result = $connect->select($name, $age, $gender);
-            //if(!$result){
-            //    throw new Exception('検索結果は0です。');
-            //}
+
+   //検索結果を取得
+//   $result = $connect->select($name, $age, $gender);
+   //if(!$result){
+   //    throw new Exception('検索結果は0です。');
+   //}
 ?>
 
 
