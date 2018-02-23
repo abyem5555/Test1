@@ -8,7 +8,7 @@
 <body>
 <form method="POST" action="searchdata.php">
   <ul>
-    <br><label>名前：<input type="text" name="userName"></label>
+    <br><label>名前：<input type="text" name="userName" autofocus></label>
     <br><label>年齢：<input type="number" name="age"></label>
     <br><label>性別：<input type="radio" name="gender" value="male">男
                 <input type="radio" name="gender" value="female">女

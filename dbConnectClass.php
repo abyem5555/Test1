@@ -45,6 +45,25 @@ class dbConnect {
         return $pdo;
     }
 
+
+    //テーブル名を指定して全データを表示するファンクション
+    function selectAllData($tablename){
+        //SQL文
+        $sql = 'SELECT * 
+                FROM ';
+        $sql = $sql.$tablename; 
+
+        //$sql = 'SELECT * FROM test122';
+        //検索結果を取得
+        $pdosl = $this->pdo();
+        $prestm = $pdosl->prepare($sql);
+    
+        //実行
+        $prestm->execute();
+        //結果を戻す
+        return $prestm;
+    }
+
     //名前・年齢・性別での検索用ファンクション
     function selectData($name, $age, $gender){
 

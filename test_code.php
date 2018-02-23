@@ -13,9 +13,13 @@
     mb_regex_encoding("utf-8");
     if(($_POST['formData1'] != "0") && empty($_POST['formData1'])) {
         $f_data1 = "";
+        $hantei = "";
+        $a = "";
     } else {
+        //$f_data1 = $check->strHalftoFull($_POST('formData1'));
         $f_data1 = $_POST['formData1'];
 
+        //$a = $check->strHalftoFull($_POST('formData1'));
         //ひらがなチェック
         //正規表現
         // //区切り文字 //でなくてもよい（\でエスケープ）
@@ -25,23 +29,26 @@
         // + 1回以上の繰り返し
         // $ 行末
         // u utf-8 (文字コード指定)
-        if(preg_match("/^[ぁ-んー]+$/u",$f_data1)){
-        //if(preg_match('/[^ぁ-んー]+$/u',$kana)){
+        //if(preg_match("/^[ぁ-んー]+$/u",$f_data1)){
+        if($check->chkKana($f_data1)){
             //ひらがなのみの場合trueを返す
-           $hantei[] = "ひらがな"; 
+           $hanteiArray[] = "ひらがな"; 
         } else {
-           $hantei[] = "ひらがな以外";
+           $hanteiArray[] = "ひらがな以外";
         }
 
         //0以上の正の数かチェック
         if(preg_match("/^[0-9]+$/", $f_data1)){
-            $hantei[] = "正の数字";
+            $hanteiArray[] = "正の数字";
         } else {
-            $hantei[] = "正の数字以外";
+            $hanteiArray[] = "正の数字以外";
+        }
+        if(!empty($hanteiArray)){
+            $hantei = implode("<br>", $hanteiArray);
+        }
     }
-}
-
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -61,9 +68,11 @@
 </form>
 
     <?php
+//    echo $a;
+    echo "<br>";
     echo $f_data1;
     echo "<br>";
-    echo $hantei1;
+    echo $hantei;
     ?>
 </body>
 

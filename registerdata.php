@@ -1,6 +1,7 @@
 <?php
 //DB接続クラス読み込み
 require_once 'dbConnectClass.php';
+//データチェッククラス読み込み
 require_once 'dataCheckClass.php';
 
 //クラス生成
@@ -29,8 +30,9 @@ try{
     if(empty($name)){
         throw new Exception('名前を入力してください。');
     }
-    //年齢の入力がない場合エラー(0才もエラー)
-    if(empty($age)){
+    
+    //年齢の入力がない場合エラー
+    if(($age != "0") && empty($age)){
         throw new Exception('年齢を入力してください。');
     } else {
         //年齢が正の数字でない場合エラー
