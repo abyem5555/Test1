@@ -37,7 +37,7 @@
             throw new Exception('年齢が正しくありません');   
        }
    //検索結果を取得
-   $result = $connect->select($name, $age, $gender);
+   $result = $connect->selectData($name, $age, $gender);
 
     } catch(Exception $e){
        echo 'error:' .$e->getMessage();

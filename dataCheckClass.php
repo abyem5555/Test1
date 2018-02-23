@@ -22,6 +22,17 @@ class dataCheckClass{
         return $str;
     }
 
+    //ひらがなチェック
+    function chkKana($str){
+        //正規表現　^先頭([]内の場合は否定）　”ぁ〜んー”　+1回以上の繰り返し $行末 u:utf-8
+        if(preg_match("/^[ぁ-んー]+$/u",$str)){
+            //ひらがなのみの場合trueを返す
+            return true;
+        }
+        //ひらがな以外がある場合falseを返す
+        return false;
+    }
+
     //正の数値かチェック　正:true 負:false
     function chkNum($str){
         //数値型かチェック

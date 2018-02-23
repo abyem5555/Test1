@@ -46,7 +46,7 @@ class dbConnect {
     }
 
     //名前・年齢・性別での検索用ファンクション
-    function select($name, $age, $gender){
+    function selectData($name, $age, $gender){
 
         //SQL文
         //！！！LIKEのエスケープ入れる？
@@ -110,5 +110,39 @@ class dbConnect {
     //    //return $result;
     //    return $prestm;
     //}
+
+    //名前・年齢・性別での検索用ファンクション
+    function addData($kana, $name, $age, $gender){
+        $sql = 'INSERT INTO test122
+                        (user_name_kana, user_name, age, gender)
+                        VALUES
+                        (:kana, :name, :age, :gender)';
+        //SQL文作成
+        $pdoins = $this->pdo();
+        $prestm = $pdoins->prepare($sql);
+
+        //トランザクション処理を開始
+        $pdoins->beginTransaction();
+
+        try{
+            //各項目をバインド
+            $prestm->bindValue(':kana',$kana,PDO::PARAM_STR);
+            $prestm->bindValue(':name',$name,PDO::PARAM_STR);
+            $prestm->bindValue(':age',$age,PDO::PARAM_INT);
+            $prestm->bindValue(':gender',$gender,PDO::PARAM_STR);
+            //実行
+            $prestm->execute();
+            //コミット
+            $pdoins->commit();
+
+        } catch (PDOException $e){
+            //エラーの場合ロールバック
+            $pdoins->rollBack();
+            exit('登録に出来ませんでした。'.$e->getMessage());
+        }
+        return $prestm;
+    
+    }
+
 }
 ?>
