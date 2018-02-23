@@ -1,21 +1,45 @@
 <?php   
+
+    //DB接続クラス読み込み
+    require_once 'dbConnectClass.php';
+    //データチェッククラス読み込み
+    require_once 'dataCheckClass.php';
+
+    //クラス生成
+    //$connect = new dbConnect();
+    $check = new dataCheckClass();
+
+
     mb_regex_encoding("utf-8");
-    if(empty($_POST['userNameKana'])) {
-        $kana = "";
-        $hantei = "";
+    if(($_POST['formData1'] != "0") && empty($_POST['formData1'])) {
+        $f_data1 = "";
     } else {
-        $kana = $_POST['userNameKana'];
+        $f_data1 = $_POST['formData1'];
 
         //ひらがなチェック
-        //正規表現　^先頭([]内の場合は否定）　”ぁ〜んー”　+1回以上の繰り返し $行末 u:utf-8
-        if(preg_match("/^[ぁ-んー]+$/u",$kana)){
+        //正規表現
+        // //区切り文字 //でなくてもよい（\でエスケープ）
+        // ^先頭([]内の場合は否定）
+        // []括弧内の1文字にマッチ
+        // ”ぁ〜んー” テストする文字
+        // + 1回以上の繰り返し
+        // $ 行末
+        // u utf-8 (文字コード指定)
+        if(preg_match("/^[ぁ-んー]+$/u",$f_data1)){
         //if(preg_match('/[^ぁ-んー]+$/u',$kana)){
             //ひらがなのみの場合trueを返す
-           $hantei = "ひらがな"; 
+           $hantei[] = "ひらがな"; 
         } else {
-           $hantei = "ひらがな以外";
+           $hantei[] = "ひらがな以外";
         }
+
+        //0以上の正の数かチェック
+        if(preg_match("/^[0-9]+$/", $f_data1)){
+            $hantei[] = "正の数字";
+        } else {
+            $hantei[] = "正の数字以外";
     }
+}
 
 ?>
 <!DOCTYPE html>
@@ -31,15 +55,15 @@
 
 <form method="POST" action="test_code.php">
   <ul>
-    <br><label>なまえ：<input type="text" name="userNameKana"></label>
+    <br><label>判定する文字：<input type="text" name="formData1" autofocus></label>
     <br><label><input type="submit" value="判定"></label>
   </ul>
 </form>
 
     <?php
-    echo $kana;
+    echo $f_data1;
     echo "<br>";
-    echo $hantei;
+    echo $hantei1;
     ?>
 </body>
 
