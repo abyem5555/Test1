@@ -6,17 +6,16 @@
     require_once 'dataCheckClass.php';
 
     //クラス生成
-    //$connect = new dbConnect();
     $check = new dataCheckClass();
 
-
     mb_regex_encoding("utf-8");
-    if(($_POST['formData1'] != "0") && empty($_POST['formData1'])) {
-        $f_data1 = "";
-        $hantei = "";
-        $a = "";
-    } else {
-        //$f_data1 = $check->strHalftoFull($_POST('formData1'));
+    $f_data1 = "";
+    $hantei = "";
+    $a = "";
+
+    if(isset($_POST['formData1'])){
+
+        //フォームからデータ取得
         $f_data1 = $_POST['formData1'];
 
         //$a = $check->strHalftoFull($_POST('formData1'));
@@ -39,9 +38,9 @@
 
         //0以上の正の数かチェック
         if(preg_match("/^[0-9]+$/", $f_data1)){
-            $hanteiArray[] = "正の数字";
+            $hanteiArray[] = "0または正の数字";
         } else {
-            $hanteiArray[] = "正の数字以外";
+            $hanteiArray[] = "0と正の数字以外";
         }
         if(!empty($hanteiArray)){
             $hantei = implode("<br>", $hanteiArray);
@@ -63,13 +62,13 @@
 <form method="POST" action="test_code.php">
   <ul>
     <br><label>判定する文字：<input type="text" name="formData1" autofocus></label>
-    <br><label><input type="submit" value="判定"></label>
+    <br><label><input type="submit" value="判定"></label><label><input type="reset" value="クリア"></label>
   </ul>
 </form>
 
     <?php
-//    echo $a;
     echo "<br>";
+    echo "入力したデータ：";
     echo $f_data1;
     echo "<br>";
     echo $hantei;

@@ -15,7 +15,8 @@
     <br><label>性別：<input type="radio" name="gender" value="male">男
                 <input type="radio" name="gender" value="female">女
         </label>
-    <br><label><input type="submit" value="登録"></label>
+    <br>
+        <label><input type="submit" value="登録"></label>
   </ul>
 </form>
 </body>

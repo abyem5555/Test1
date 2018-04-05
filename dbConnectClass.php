@@ -64,6 +64,27 @@ class dbConnect {
         return $prestm;
     }
 
+    //IDでの検索用ファンクション
+    function selectID($id){
+
+        //SQL文
+        $sql = 'SELECT * 
+                FROM test122
+                WHERE id = :id';
+
+        //検索結果を取得
+        $pdosl = $this->pdo();
+        $prestm = $pdosl->prepare($sql);
+    
+        if(!empty($id)){
+            $prestm->bindValue(':id',$id,PDO::PARAM_STR);
+        }
+        //実行
+        $prestm->execute();
+        //結果を戻す
+        return $prestm;
+    }
+    
     //名前・年齢・性別での検索用ファンクション
     function selectData($name, $age, $gender){
 
@@ -130,7 +151,7 @@ class dbConnect {
     //    return $prestm;
     //}
 
-    //名前・年齢・性別での検索用ファンクション
+    //名前・年齢・性別での登録用ファンクション
     function addData($kana, $name, $age, $gender){
         $sql = 'INSERT INTO test122
                         (user_name_kana, user_name, age, gender)
@@ -157,11 +178,47 @@ class dbConnect {
         } catch (PDOException $e){
             //エラーの場合ロールバック
             $pdoins->rollBack();
-            exit('登録に出来ませんでした。'.$e->getMessage());
+            exit('登録出来ませんでした。'.$e->getMessage());
         }
         return $prestm;
     
     }
 
+    //更新用ファンクション
+    function updateData($id, $kana, $name, $age, $gender){
+        $sql = 'UPDATE test122
+                    SET user_name_kana = :kana,
+                        user_name = :name,
+                        age = :age,
+                        gender = :gender
+                    WHERE id = :id';
+        
+        //SQL文作成
+        $pdoup = $this->pdo();
+        $prestm = $pdoup->prepare($sql);
+
+        //トランザクション処理を開始
+        $pdoup->beginTransaction();
+
+        try{
+            //各項目をバインド
+            $prestm->bindValue(':id',$id,PDO::PARAM_INT);
+            $prestm->bindValue(':kana',$kana,PDO::PARAM_STR);
+            $prestm->bindValue(':name',$name,PDO::PARAM_STR);
+            $prestm->bindValue(':age',$age,PDO::PARAM_INT);
+            $prestm->bindValue(':gender',$gender,PDO::PARAM_STR);
+            //実行
+            $prestm->execute();
+            //コミット
+            $pdoup->commit();
+
+        } catch (PDOException $e){
+            //エラーの場合ロールバック
+            $pdoup->rollBack();
+            exit('更新失敗しました。'.$e->getMessage());
+        }
+        return $prestm;
+    
+    }
 }
 ?>
