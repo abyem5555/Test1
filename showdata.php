@@ -7,8 +7,18 @@
 
     try{
 
-        //IDを前のページから取得
-        $id = $_GET['id'];
+    //IDを前のページから取得
+    $id = $_GET['id'];
+
+    $msg = "";
+    if (isset($_GET["msg"])){
+        $msg = $_GET["msg"];
+        $userNameKana = $_GET["kana"];
+        $userName = $_GET["name"];
+        $age = $_GET["age"];
+        $gender = $_GET["gender"];
+    } else {
+
         //検索結果を取得
         $result = $connect->selectID($id);
         $row = $result->fetch(PDO::FETCH_ASSOC);
@@ -17,12 +27,14 @@
         $userNameKana = $row['user_name_kana'];
         $userName = $row['user_name'];
         $age = $row['age'];
+        $gender = $row['gender'];
         
+    }
         $male = "";
         $female = "";
         
         //性別のラジオボタンチェック
-        switch($row['gender']){
+        switch($gender){
             //男性
             case "M":
             $male = "checked";
@@ -52,6 +64,13 @@
     </head>
     <body>
     
+    <?php
+    if ($msg){
+        echo "$msg";
+        echo "<br>";
+    }
+    ?>
+    
     <form method="POST" action="modifydata.php">
       <ul>
         <br><label>番号：<?=htmlspecialchars($id,ENT_QUOTES,'utf-8')?></label>
@@ -59,7 +78,7 @@
         <br><label>名前：<input type="text" name="userName"
                     value="<?=$userName?>"></label>
         <br><label>年齢：<input type="number" name="age" value="<?=$age?>"></label>
-        <br><label>性別：<input type="radio" name="gender" value="M" <?= $male?>>男
+        <br><label>性別：<input type="radio" name="gender" value="M" <?=$male?>>男
                     <input type="radio" name="gender" value="F" <?=$female?>>女
             </label>
         <br>

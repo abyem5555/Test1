@@ -25,6 +25,10 @@ $gender = $_POST['gender'];
 //エラーチェック 
 try{
 
+    //メッセージをクリア
+    $ok_message = "";
+    $ng_message = "";
+
     //処理判定
     switch($process){
         //更新処理
@@ -38,13 +42,13 @@ try{
                 $result = $connect->updateData($id, $kana, $name, $age, $gender);
                 //結果メッセージを表示
                 if($result->rowCount()>0){
-                     $r_message = '更新しました。';
+                     $ok_message = '更新しました。';
                 } else {
-                     $r_message = '更新に失敗しました。またはデータ変更がありません。';
+                     $ng_message = '変更がありません。';
                 }
             //エラーがある場合はメッセージを設定
             } else {
-                $r_message = $errmsg;
+                $ng_message = $errmsg;
             }
             break;
 
@@ -54,9 +58,9 @@ try{
             
             //結果メッセージを表示
             if($result->rowCount()>0){
-                $r_message = '削除しました。';
+                $ok_message = '削除しました。';
             } else {
-                $r_message = '削除に失敗しました。';
+                $ng_message = '削除に失敗しました。';
             }
             break;
 
@@ -82,16 +86,23 @@ try{
 
     <body>
 <?php
-echo "処理結果：".$r_message;   
-echo "<br>";
-echo "変更したデータ：";
-echo "<br>";
-echo "番号：".$id."  なまえ：".$kana."  名前：".$name."  年齢：".$age."  性別：".$gender;
-echo "<br>";
-echo "<br>";
-echo "変更後の一覧";
+//エラーメッセージの有無によって分岐
+if($ng_message){
+    $uri = $_SERVER['HTTP_REFERER']."&msg=".$ng_message.
+        "&kana=".$kana."&name=".$name."&age=".$age."&gender=".$gender;
+    header('Location: '.$uri);
+    exit();
+} elseif($ok_message){
+    echo "処理結果：".$ok_message;
+    echo "<br>";
+    echo "対象データ";
+    echo "<br>";
+    echo "番号：".$id."<br>なまえ：".$kana."<br>名前：".$name."<br>年齢：".$age."<br>性別：".$gender;
+    echo "</table>";
+    echo "<br>";
+    echo "<br>";
+    echo "変更後の一覧";
 ?>
-
     <div>
     <table border="1">
         <tr>
@@ -114,6 +125,7 @@ echo "変更後の一覧";
         </tr>
 <?php
     }
+}
 ?>
     </table>
     </div>
