@@ -1,22 +1,35 @@
 <?php
+    //一覧でクリックした番号をキーにデータをフォームに表示。
+    //フォームを表示しデータ変更・削除する画面
+
+    //セッション開始
+    session_start();
+
     //DB接続クラス読み込み
     require_once 'dbConnectClass.php';
+    //セッション管理クラスを読み込み
+    require_once 'sessionManageClass.php';
 
     //クラス生成
     $connect = new dbConnect();
+    $sessionm = new sessionManageClass();
 
     try{
 
     //IDを前のページから取得
     $id = $_GET['id'];
 
+    //メッセージを初期化
     $msg = "";
-    if (isset($_GET["msg"])){
-        $msg = $_GET["msg"];
-        $userNameKana = $_GET["kana"];
-        $userName = $_GET["name"];
-        $age = $_GET["age"];
-        $gender = $_GET["gender"];
+
+    //セッション変数に保存した入力データを取り出す
+    if (isset($_SESSION["errmsg"])){
+        $msg = $_SESSION["errmsg"];
+        $userNameKana = $_SESSION["kana"];
+        $userName = $_SESSION["name"];
+        $age = $_SESSION["age"];
+        $gender = $_SESSION["gender"];
+        $sessionm->killSession();
     } else {
 
         //検索結果を取得
@@ -30,6 +43,8 @@
         $gender = $row['gender'];
         
     }
+
+        //ラジオボタンチェック判定変数
         $male = "";
         $female = "";
         

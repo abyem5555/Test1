@@ -1,19 +1,20 @@
 <?php
-  //DB接続クラス読み込み
-  require_once 'dbConnectClass.php';
-
-  //クラス生成
-  $connect = new dbConnect();
-  $tablename = "test122";
-
-  try{
-    //検索結果を取得
-    $result = $connect->selectAllData($tablename);
-
-  } catch(Exception $e){
-    echo 'error:' .$e->getMessage();
-    return;
-  }
+    //データベースに登録されている一覧を表示し変更したいデータを選択する
+    //DB接続クラス読み込み
+    require_once 'dbConnectClass.php';
+    
+    //クラス生成
+    $connect = new dbConnect();
+    $tablename = "test122";
+    
+    try{
+      //テーブルにあるデータを全て取得
+      $result = $connect->selectAllData($tablename);
+    
+    } catch(Exception $e){
+      echo 'error:' .$e->getMessage();
+      return;
+    }
 ?>
 
 
@@ -21,7 +22,7 @@
 <html lang="ja">
     <head>
         <meta charset="utf-8">
-        <title>データベーステスト更新・削除</title>
+        <title>更新・削除するデータ選択</title>
     </head>
     <body>
     

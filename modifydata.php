@@ -1,15 +1,25 @@
 <?php
+
+//データをチェックし問題なければ更新・削除
+//エラーがある場合は前のページに戻る
+
+//セッション開始
+session_start();
+
 //DB接続クラス読み込み
 require_once 'dbConnectClass.php';
 //データチェッククラス読み込み
 require_once 'dataCheckClass.php';
 //フォームデータチェッククラス読み込み
 require_once 'chkFormClass.php';
+//セッション管理クラスを読み込み
+require_once 'sessionManageClass.php';
 
 //クラス生成
 $connect = new dbConnect();
 $check = new dataCheckClass();
 $checkf = new chkFormClass();
+$sessionm = new sessionManageClass();
 
 //検索するテーブル
 $tablename = "test122";
@@ -21,6 +31,14 @@ $kana = $check->strTrim($_POST['userNameKana']);
 $name = $check->strTrim($_POST['userName']);
 $age = $check->strTrim($_POST['age']);
 $gender = $_POST['gender'];
+
+//データをセッションにも保持
+//$_SESSION['id'] = $id;
+$_SESSION['kana'] = $kana;
+$_SESSION['name'] = $name;
+$_SESSION['age'] = $age;
+$_SESSION['gender'] = $gender;
+$_SESSION['errmsg'] = "";
 
 //エラーチェック 
 try{
@@ -43,6 +61,8 @@ try{
                 //結果メッセージを表示
                 if($result->rowCount()>0){
                      $ok_message = '更新しました。';
+                     //セッションを破棄
+                     $sessionm->killSession();
                 } else {
                      $ng_message = '変更がありません。';
                 }
@@ -59,6 +79,8 @@ try{
             //結果メッセージを表示
             if($result->rowCount()>0){
                 $ok_message = '削除しました。';
+                //セッションを破棄
+                $sessionm->killSession();
             } else {
                 $ng_message = '削除に失敗しました。';
             }
@@ -88,8 +110,9 @@ try{
 <?php
 //エラーメッセージの有無によって分岐
 if($ng_message){
-    $uri = $_SERVER['HTTP_REFERER']."&msg=".$ng_message.
-        "&kana=".$kana."&name=".$name."&age=".$age."&gender=".$gender;
+    //エラーメッセージをセッション変数に入れる
+    $_SESSION['errmsg'] = $ng_message;
+    $uri = $_SERVER['HTTP_REFERER'];
     header('Location: '.$uri);
     exit();
 } elseif($ok_message){
