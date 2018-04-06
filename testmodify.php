@@ -4,15 +4,16 @@
 
   //クラス生成
   $connect = new dbConnect();
+  $tablename = "test122";
 
   try{
-   //検索結果を取得
-   $result = $connect->selectAllData("test122");
+    //検索結果を取得
+    $result = $connect->selectAllData($tablename);
 
-    } catch(Exception $e){
-       echo 'error:' .$e->getMessage();
-       return;
-   }
+  } catch(Exception $e){
+    echo 'error:' .$e->getMessage();
+    return;
+  }
 ?>
 
 
@@ -24,29 +25,28 @@
     </head>
     <body>
     
-    <form method="POST" action="modifydata.php">
-       <table border="1">
-            <tr>
-                <th>番号</th>
-                <th>名前</th>
-                <th>年齢</th>
-                <th>性別</th>
-            </tr>
+    <table border="1">
+        <tr>
+            <th>番号</th>
+            <th>なまえ</th>
+            <th>名前</th>
+            <th>年齢</th>
+            <th>性別</th>
+        </tr>
 
 <?php
     while($row = $result->fetch(PDO::FETCH_ASSOC)){
 ?>
-            <tr>
-                <td><a href="showdata.php?id=<?=$row['id']?>"><?=htmlspecialchars($row['id'],ENT_QUOTES,'utf-8')?></a></td>
-                <td><?=htmlspecialchars($row['user_name'],ENT_QUOTES,'utf-8')?></td>
-                <td><?=htmlspecialchars($row['age'],ENT_QUOTES,'utf-8')?></td>
-                <td><?=htmlspecialchars($row['gender'],ENT_QUOTES,'utf-8')?></td>
-            </tr>
+        <tr>
+            <td><a href="showdata.php?id=<?=$row['id']?>"><?=htmlspecialchars($row['id'],ENT_QUOTES,'utf-8')?></a></td>
+            <td><?=htmlspecialchars($row['user_name_kana'],ENT_QUOTES,'utf-8')?></td>
+            <td><?=htmlspecialchars($row['user_name'],ENT_QUOTES,'utf-8')?></td>
+            <td><?=htmlspecialchars($row['age'],ENT_QUOTES,'utf-8')?></td>
+            <td><?=htmlspecialchars($row['gender'],ENT_QUOTES,'utf-8')?></td>
+        </tr>
 <?php
     }
 ?>
-        </table>
-    <br>
-</form>
+    </table>
 </body>
 </html>

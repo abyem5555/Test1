@@ -45,7 +45,7 @@ class dbConnect {
         return $pdo;
     }
 
-
+//***********************************************************    
     //テーブル名を指定して全データを表示するファンクション
     function selectAllData($tablename){
         //SQL文
@@ -53,7 +53,6 @@ class dbConnect {
                 FROM ';
         $sql = $sql.$tablename; 
 
-        //$sql = 'SELECT * FROM test122';
         //検索結果を取得
         $pdosl = $this->pdo();
         $prestm = $pdosl->prepare($sql);
@@ -85,6 +84,7 @@ class dbConnect {
         return $prestm;
     }
     
+//***********************************************************    
     //名前・年齢・性別での検索用ファンクション
     function selectData($name, $age, $gender){
 
@@ -132,25 +132,7 @@ class dbConnect {
         return $prestm;
     }
     
-    //検索用ファンクション
-    //function select($sql, $var1){
-    //    $pdosl = $this->pdo();
-    //    $prestm = $pdosl->prepare($sql);
-    
-    //    //検索条件の値をバインド
-    //    $prestm->bindValue(':name',"%{$var1}%",PDO::PARAM_STR);
-    //    $prestm->bindValue(':age',$age,PDO::PARAM_INT);
-    //    $prestm->bindValue(':gender',$gender,PDO::PARAM_STR);
-    //    
-    //    //実行
-    //    //$prestm->query($sql);
-    //    $prestm->execute();
-    //    //結果を戻す
-    //    //$result=$prestm->fetchAll(PDO::FETCH_ASSOC);
-    //    //return $result;
-    //    return $prestm;
-    //}
-
+//***********************************************************    
     //名前・年齢・性別での登録用ファンクション
     function addData($kana, $name, $age, $gender){
         $sql = 'INSERT INTO test122
@@ -184,6 +166,7 @@ class dbConnect {
     
     }
 
+//***********************************************************    
     //更新用ファンクション
     function updateData($id, $kana, $name, $age, $gender){
         $sql = 'UPDATE test122
@@ -219,6 +202,28 @@ class dbConnect {
         }
         return $prestm;
     
+    }
+
+//***********************************************************    
+    //削除用ファンクション
+    function deleteData($id){
+        $sql = 'DELETE FROM test122
+                    WHERE id = :id';
+        
+        //SQL文作成
+        $pdodl = $this->pdo();
+        $prestm = $pdodl->prepare($sql);
+
+        try{
+            //各項目をバインド
+            $prestm->bindValue(':id',$id,PDO::PARAM_INT);
+            //実行
+            $prestm->execute();
+
+        } catch (PDOException $e){
+            exit('削除失敗しました。'.$e->getMessage());
+        }
+        return $prestm;
     }
 }
 ?>
