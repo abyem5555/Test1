@@ -35,7 +35,6 @@
 
 <?php
     while($row = $result->fetch(PDO::FETCH_ASSOC)){
-        //print_r($row);
 ?>
             <tr>
                 <td><a href="showdata.php?id=<?=$row['id']?>"><?=htmlspecialchars($row['id'],ENT_QUOTES,'utf-8')?></a></td>
@@ -48,8 +47,6 @@
 ?>
         </table>
     <br>
-        <label><input type="submit" value="更新" name="process"></label>
-        <label><input type="submit" value="削除" name="process"></label>
 </form>
 </body>
 </html>

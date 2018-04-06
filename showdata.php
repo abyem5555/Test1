@@ -59,8 +59,8 @@
         <br><label>名前：<input type="text" name="userName"
                     value="<?=$userName?>"></label>
         <br><label>年齢：<input type="number" name="age" value="<?=$age?>"></label>
-        <br><label>性別：<input type="radio" name="gender" value="male" <?= $male?>>男
-                    <input type="radio" name="gender" value="female" <?=$female?>>女
+        <br><label>性別：<input type="radio" name="gender" value="M" <?= $male?>>男
+                    <input type="radio" name="gender" value="F" <?=$female?>>女
             </label>
         <br>
         <label><input type="submit" value="更新" name="process"></label>
